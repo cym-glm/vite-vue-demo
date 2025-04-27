@@ -3,21 +3,7 @@ import {onMounted} from 'vue';
 import {RouterLink, RouterView} from 'vue-router';
 import HelloWorld from './components/HelloWorld.vue';
 import {getTopicsInfo} from './api/user';
-const url = import.meta.env.VITE_API_URL;
 
-onMounted(() => {
-    // https://cnodejs.org/api/v1/get/topics
-    // fetch('/api/topics')
-    //   .then(response => response.json())
-    //   .then(data => console.log(data))
-    //   fetch('/api/topic/61f69e4aa08b39f75309c2a8')
-    //   .then(response => response.json())
-    //   .then(data => console.log(data))
-
-    getTopicsInfo().then((data) => {
-        console.log(data.data);
-    });
-});
 </script>
 
 <template>
