@@ -47,14 +47,4 @@ jobs:
           username: ${{ secrets.ALIYUN_USER }}
           key: ${{ secrets.ALIYUN_SSH_KEY }}
           script: |
-            head -n 5 /root/web/dist/index.html
-
-      - name: 🔍 Check deployed file
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.ALIYUN_HOST }}
-          username: ${{ secrets.ALIYUN_USER }}
-          key: ${{ secrets.ALIYUN_SSH_KEY }}
-          script: |
-            echo "✅ 最新 index.html 头部内容如下:"
-            head -n 10 /www/wwwroot/your-app/index.html
+            head -n 8 /root/web/dist/index.html
