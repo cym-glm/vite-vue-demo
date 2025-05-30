@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - test
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -23,23 +24,34 @@ jobs:
       - name: 🛠️ Build Project
         run: npm run build
 
-      - name: 🧹 Clean Remote Dist Folder
+      - name: 🧩 Archive Dist Folder
+        run: tar -czf dist.tar.gz dist
+
+      - name: 📤 Upload to Aliyun
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.ALIYUN_HOST }}
+          username: ${{ secrets.ALIYUN_USER }}
+          key: ${{ secrets.ALIYUN_SSH_KEY }}
+          source: "dist.tar.gz"
+          target: "/root/web"
+
+      - name: 🛠️ Extract and Replace on Server
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.ALIYUN_HOST }}
           username: ${{ secrets.ALIYUN_USER }}
           key: ${{ secrets.ALIYUN_SSH_KEY }}
           script: |
-            rm -rf /root/web/dist/*
-
-      - name: 📤 Deploy to Aliyun via SCP
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.ALIYUN_HOST }}
-          username: ${{ secrets.ALIYUN_USER }}
-          key: ${{ secrets.ALIYUN_SSH_KEY }}
-          source: "dist/**"
-          target: "/root/web"
+            cd /root/web
+            mkdir -p dist_bak
+            if [ -d dist ]; then mv dist/* dist_bak/; fi
+            rm -rf dist
+            mkdir dist
+            tar -xzf dist.tar.gz -C dist --strip-components=1
+            rm -f dist.tar.gz
+            echo "✅ 解压成功，展示 index.html 头部内容："
+            head -n 8 dist/index.html
 
       - name: 🔁 Reload Nginx
         uses: appleboy/ssh-action@v1.0.3
@@ -49,11 +61,3 @@ jobs:
           key: ${{ secrets.ALIYUN_SSH_KEY }}
           script: |
             /usr/local/nginx/sbin/nginx -s reload
-      - name: 🔍 Show deployed index.html first line
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.ALIYUN_HOST }}
-          username: ${{ secrets.ALIYUN_USER }}
-          key: ${{ secrets.ALIYUN_SSH_KEY }}
-          script: |
-            head -n 8 /root/web/dist/index.html

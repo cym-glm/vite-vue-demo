@@ -1,6 +1,6 @@
 <template>
     <div class="about">
-        <h1>about</h1>
+        <h1>about11111</h1>
         <div ref="chartRef" style="width: 600px; height: 400px"></div>
         <el-button @click="ajaxTest" type="primary" style="margin-left: 16px"> open </el-button>
     </div>
