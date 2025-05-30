@@ -16,10 +16,10 @@ export default defineConfig(({mode}) => {
             host: '0.0.0.0',
             // open: true,
             proxy: {
-                '/api': {
-                    target: 'https://cnodejs.org/api/v1',
+                '/dawei': {
+                    target: 'http://dawei-code.top:9898',
                     changeOrigin: true,
-                    rewrite: (path) => path.replace(/^\/api/, '')
+                    rewrite: (path) => path.replace(/^\/dawei/, '')
                 }
             }
         },
@@ -36,8 +36,8 @@ export default defineConfig(({mode}) => {
                         lodash: ['lodash'],
                         echarts: ['echarts'],
                         dayjs: ['dayjs'],
-                        elementPlus: ['element-plus'],
-                        vue: ['vue', 'vue-router', 'pinia', 'axios']
+                        elementPlus: ['element-plus']
+                        // vue: ['vue', 'vue-router', 'pinia', 'axios']
                         // 'a-b-c-d': [
                         //     'src/views/AView.vue',
                         //     'src/views/BView.vue',

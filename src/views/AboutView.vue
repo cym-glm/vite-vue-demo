@@ -2,13 +2,20 @@
     <div class="about">
         <h1>This is an about page</h1>
         <div ref="chartRef" style="width: 600px; height: 400px"></div>
-        <el-button type="primary" style="margin-left: 16px"> open </el-button>
+        <el-button @click="ajaxTest" type="primary" style="margin-left: 16px"> open </el-button>
     </div>
 </template>
 <script setup lang="ts">
-// import {onMounted, ref} from 'vue';
+import axios from 'axios';
+import {onMounted, ref} from 'vue';
 import echarts from '../plugins/echarts.ts';
 const chartRef = ref<HTMLElement>();
+const ajaxTest = () => {
+  // http://dawei-code.top:9898/hello
+  axios.get('/dawei/hello').then(res => {
+    console.log(res);
+  })
+};
 onMounted(() => {
     const chart = echarts.init(chartRef.value!);
     chart.setOption({
