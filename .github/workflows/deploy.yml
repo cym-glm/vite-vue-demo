@@ -29,7 +29,7 @@ jobs:
           host: ${{ secrets.ALIYUN_HOST }}
           username: ${{ secrets.ALIYUN_USER }}
           key: ${{ secrets.ALIYUN_SSH_KEY }}
-          source: "dist/*"
+          source: "dist/**"
           target: "/root/web/dist"
 
       - name: 🔁 Reload Nginx
@@ -40,3 +40,21 @@ jobs:
           key: ${{ secrets.ALIYUN_SSH_KEY }}
           script: |
             /usr/local/nginx/sbin/nginx -s reload
+      - name: 🔍 Show deployed index.html first line
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.ALIYUN_HOST }}
+          username: ${{ secrets.ALIYUN_USER }}
+          key: ${{ secrets.ALIYUN_SSH_KEY }}
+          script: |
+            head -n 5 /root/web/dist/index.html
+
+      - name: 🔍 Check deployed file
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.ALIYUN_HOST }}
+          username: ${{ secrets.ALIYUN_USER }}
+          key: ${{ secrets.ALIYUN_SSH_KEY }}
+          script: |
+            echo "✅ 最新 index.html 头部内容如下:"
+            head -n 10 /www/wwwroot/your-app/index.html
